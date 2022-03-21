@@ -229,6 +229,8 @@ function sensei_create_master_certificate_template() {
 		'_certificate_place_text'             => __( '{{course_place}}', 'sensei-certificates' ),
 	);
 
+	$defaults = apply_filters( 'sensei_certificate_fields_defaults', $defaults );
+
 	// Certificate template font defaults.
 	update_post_meta( $post_id, '_certificate_font_color', $defaults['_certificate_font_color'] );
 	update_post_meta( $post_id, '_certificate_font_size', $defaults['_certificate_font_size'] );
@@ -237,7 +239,16 @@ function sensei_create_master_certificate_template() {
 
 	// Create the certificate template fields data structure.
 	$fields = array();
-	foreach ( array( '_certificate_heading', '_certificate_message', '_certificate_course', '_certificate_completion', '_certificate_place' ) as $i => $field_name ) {
+
+	$process_fields = apply_filters( 'sensei_certificates_process_fields', array(
+		'_certificate_heading',
+		'_certificate_message',
+		'_certificate_course',
+		'_certificate_completion',
+		'_certificate_place',
+	) );
+
+	foreach ( $process_fields as $i => $field_name ) {
 		// Set the field defaults.
 		$field = array(
 			'type'     => 'property',

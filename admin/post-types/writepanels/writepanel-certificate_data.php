@@ -310,6 +310,7 @@ function certificate_template_data_meta_box( $post ) {
 					);
 				echo '</div>';
 
+				do_action( 'sensei_certificates_after_certificate_option_fields' );
 			?>
 		</div>
 	</div>
@@ -355,7 +356,16 @@ function certificate_templates_process_meta( $post_id, $post ) {
 	// Original sizes: default 11, product name 16, sku 8.
 	// Create the certificate template fields data structure.
 	$fields = array();
-	foreach ( array( '_certificate_heading', '_certificate_message', '_certificate_course', '_certificate_completion', '_certificate_place' ) as $i => $field_name ) {
+
+	$process_fields = apply_filters( 'sensei_certificates_process_fields', array(
+		'_certificate_heading',
+		'_certificate_message',
+		'_certificate_course',
+		'_certificate_completion',
+		'_certificate_place',
+	) );
+
+	foreach ( $process_fields as $i => $field_name ) {
 
 		// Set the field defaults.
 		$field = array(
