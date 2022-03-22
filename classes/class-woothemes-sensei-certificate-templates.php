@@ -459,27 +459,21 @@ class WooThemes_Sensei_Certificate_Templates {
 
 		$date = Woothemes_Sensei_Certificates_Utils::get_certificate_formatted_date( $course_end_date );
 
-		$placeholders = array(
-			'{{learner}}',
-			'{{course_title}}',
-			'{{completion_date}}',
-			'{{course_place}}',
-		);
-		$replacements = array(
-			$student_name,
-			$course['post_title'],
-			$date,
-			get_bloginfo( 'name' ),
-		);
+		$replacements = apply_filters( 'sensei_certificates_template_replacements', [
+			'{{learner}}'         => $student_name,
+			'{{course_title}}'    => $course['post_title'],
+			'{{completion_date}}' => $date,
+			'{{course_place}}'    => get_bloginfo( 'name' ),
+		], null );
 
-		$placeholders = apply_filters( 'sensei_certificates_template_placeholders', $placeholders, null );
-		$replacements = apply_filters( 'sensei_certificates_template_replacements', $replacements, null );
+		$replace_from = array_keys( $replacements );
+		$replace_to = array_values( $replacements );
 
 		$certificate_heading = __( 'Certificate of Completion', 'sensei-certificates' ); // Certificate of Completion
 		if ( isset( $this->certificate_template_fields['certificate_heading']['text'] ) && '' != $this->certificate_template_fields['certificate_heading']['text'] ) {
 
 			$certificate_heading = $this->certificate_template_fields['certificate_heading']['text'];
-			$certificate_heading = str_replace( $placeholders, $replacements, $certificate_heading );
+			$certificate_heading = str_replace( $replace_from, $replace_to, $certificate_heading );
 
 		}
 
@@ -487,7 +481,7 @@ class WooThemes_Sensei_Certificate_Templates {
 		if ( isset( $this->certificate_template_fields['certificate_message']['text'] ) && '' != $this->certificate_template_fields['certificate_message']['text'] ) {
 
 			$certificate_message = $this->certificate_template_fields['certificate_message']['text'];
-			$certificate_message = str_replace( $placeholders, $replacements, $certificate_message );
+			$certificate_message = str_replace( $replace_from, $replace_to, $certificate_message );
 
 		}
 
@@ -495,7 +489,7 @@ class WooThemes_Sensei_Certificate_Templates {
 		if ( isset( $this->certificate_template_fields['certificate_course']['text'] ) && '' != $this->certificate_template_fields['certificate_course']['text'] ) {
 
 			$certificate_course = $this->certificate_template_fields['certificate_course']['text'];
-			$certificate_course = str_replace( $placeholders, $replacements, $certificate_course );
+			$certificate_course = str_replace( $replace_from, $replace_to, $certificate_course );
 
 		}
 
@@ -503,7 +497,7 @@ class WooThemes_Sensei_Certificate_Templates {
 		if ( isset( $this->certificate_template_fields['certificate_completion']['text'] ) && '' != $this->certificate_template_fields['certificate_completion']['text'] ) {
 
 			$certificate_completion = $this->certificate_template_fields['certificate_completion']['text'];
-			$certificate_completion = str_replace( $placeholders, $replacements, $certificate_completion );
+			$certificate_completion = str_replace( $replace_from, $replace_to, $certificate_completion );
 
 		}
 
@@ -512,11 +506,11 @@ class WooThemes_Sensei_Certificate_Templates {
 		if ( isset( $this->certificate_template_fields['certificate_place']['text'] ) && '' != $this->certificate_template_fields['certificate_place']['text'] ) {
 
 			$certificate_place = $this->certificate_template_fields['certificate_place']['text'];
-			$certificate_place = str_replace( $placeholders, $replacements, $certificate_place );
+			$certificate_place = str_replace( $replace_from, $replace_to, $certificate_place );
 
 		}
 
-		$extra_vars = apply_filters( 'sensei_certificates_extra_vars', [], $this, $placeholders, $replacements );
+		$extra_vars = apply_filters( 'sensei_certificates_extra_vars', [], $this, $replace_from, $replace_to );
 		if ( ! empty( $extra_vars ) ) {
 			extract( $extra_vars );
 		}
